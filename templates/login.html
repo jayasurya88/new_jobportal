@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container section-padding">
+    <div class="form-box white-bg p-5">
+        <h2 class="section-tittle text-center">Login</h2>
+        
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form action="{% url 'login_view' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn w-100">Login</button>
+        </form>
+        <p class="text-center mt-3">Don't have an account? <a href="{% url 'register_view' %}" class="theme-color">Register here</a></p>
+    </div>
+</div>
+{% endblock %}

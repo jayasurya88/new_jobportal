@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container section-padding">
+    <div class="welcome-box white-bg p-5 text-center">
+        <h2 class="section-tittle">Welcome, {{ user.username }}!</h2>
+        <p>Explore job opportunities and manage your profile.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "recruiter_base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Job Details</h2>
+    <div class="card">
+        <div class="card-body">
+            <!-- Job Title -->
+            <h3 class="card-title">{{ job.title }}</h3>
+
+            <!-- Job Information -->
+            <p class="card-text"><strong>Description:</strong> {{ job.description }}</p>
+            <p class="card-text"><strong>Location:</strong> {{ job.location }}</p>
+            <p class="card-text"><strong>Job Type:</strong> {{ job.get_job_type_display }}</p>
+            <p class="card-text"><strong>Status:</strong> {{ job.status }}</p>
+            
+            <!-- Salary Range -->
+            <p class="card-text">
+                <strong>Salary Range:</strong> 
+                {% if job.salary_min and job.salary_max %}
+                    ${{ job.salary_min }} - ${{ job.salary_max }}
+                {% else %}
+                    Not specified
+                {% endif %}
+            </p>
+
+            <!-- Experience Requirement -->
+            <p class="card-text"><strong>Experience Required:</strong> {{ job.experience }} year(s)</p>
+
+            <!-- Company Logo (If Available) -->
+            {% if job.employer.company_logo %}
+            <p><strong>Company:</strong> {{ job.employer.company_name }}</p>
+            <img src="{{ job.employer.company_logo.url }}" alt="Company Logo" class="img-fluid" style="max-height: 150px;">
+            {% endif %}
+
+            <!-- Action Buttons -->
+            <div class="mt-4">
+                <a href="{% url 'edit_job' job.id %}" class="btn btn-warning">Edit</a>
+                <form method="POST" action="{% url 'delete_job' job.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                <a href="{% url 'manage_jobs' %}" class="btn btn-secondary">Back to Jobs</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

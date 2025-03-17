@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}My Applications{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Applications</h2>
+
+    {% if applications %}
+        <div class="row">
+            {% for application in applications %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <!-- Job Title with Link -->
+                            <h5 class="card-title">
+                                <a href="{% url 'job_detail' application.job.id %}" class="text-danger text-decoration-none">
+                                    {{ application.job.title }}
+                                </a>
+                            </h5>
+
+                            <!-- Status Badge -->
+                            <p>
+                                <strong>Status:</strong> 
+                                <span class="badge {% if application.status == 'Pending' %}bg-warning{% elif application.status == 'Accepted' %}bg-success{% elif application.status == 'Rejected' %}bg-danger{% else %}bg-info{% endif %}">
+                                    {{ application.status }}
+                                </span>
+                            </p>
+
+                            <!-- Application Date -->
+                            <p><strong>Applied On:</strong> {{ application.applied_at|date:"F j, Y" }}</p>
+
+                            <!-- Download Resume -->
+                            <p>
+                                <a href="{{ application.resume.url }}" class="btn btn-outline-dark btn-sm" download>
+                                    Download Resume
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">You haven't applied for any jobs yet.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

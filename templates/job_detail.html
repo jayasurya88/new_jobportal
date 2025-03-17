@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Job Details - {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Message Display Section -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}danger{% endif %}"
+         role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="job-details">
+                <h2 class="mb-4">{{ job.title }}</h2>
+                <p><strong>Company:</strong> {{ job.employer.company_name }}</p>
+                <p><strong>Location:</strong> {{ job.location }}</p>
+                <p><strong>Job Type:</strong> {{ job.get_job_type_display }}</p>
+                <p><strong>Salary:</strong> ${{ job.salary_min }} - ${{ job.salary_max }}</p>
+                <p><strong>Posted:</strong> {{ job.created_at|date:"F j, Y" }}</p>
+
+                <h4 class="mt-4">Job Description</h4>
+                <p>{{ job.description|linebreaks }}</p>
+
+                <h4 class="mt-4">Requirements</h4>
+                <p><strong>Experience:</strong> {{ job.experience_min }} - {{ job.experience_max }} years</p>
+
+                <!-- Employer can view applicants -->
+                {% if user == job.employer %}
+                <a href="{% url 'view_applicants' job.id %}" class="btn btn-info">View Applicants</a>
+                {% endif %}
+
+                <!-- Apply Button (If not applied already) -->
+                {% if user.is_authenticated and user.user_type == "job_seeker" %}
+                    {% if has_applied %}
+                        <p class="text-success mt-3">✅ You have already applied for this job.</p>
+                    {% else %}
+                        <button id="show-apply-form" class="btn btn-primary mt-3">Apply Now</button>
+
+                        <!-- Application Form (Initially Hidden) -->
+                        <div id="application-form" style="display: none; margin-top: 20px;">
+                            <h4>Submit Your Application</h4>
+                            <form action="{% url 'apply_job' job.id %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                <!-- Resume Upload -->
+                                <div class="form-group">
+                                    <label for="resume">Upload Resume (PDF only)</label>
+                                    <input type="file" id="resume" name="resume" class="form-control" required>
+                                </div>
+
+                                <!-- Year of Passout -->
+                                <div class="form-group">
+                                    <label for="year_of_passout">Year of Passout</label>
+                                    <input type="number" id="year_of_passout" name="year_of_passout" class="form-control"
+                                           required>
+                                </div>
+
+                                <!-- Qualification -->
+                                <div class="form-group">
+                                    <label for="qualification">Qualification</label>
+                                    <input type="text" id="qualification" name="qualification" class="form-control" required>
+                                </div>
+
+                                <!-- Experience (Optional) -->
+                                <div class="form-group">
+                                    <label for="experience">Experience (in years) (Optional)</label>
+                                    <input type="number" id="experience" name="experience" class="form-control"
+                                           placeholder="0 if none">
+                                </div>
+
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-success mt-3">Submit Application</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% elif not user.is_authenticated %}
+                <a href="{% url 'login_view' %}" class="btn btn-secondary mt-3">Login to Apply</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Company Info Section -->
+        <div class="col-lg-4">
+            <div class="company-info p-4 border rounded">
+                <h4>About the Company</h4>
+                {% if job.employer.company_logo %}
+                <img src="{{ job.employer.company_logo.url }}" alt="{{ job.employer.company_name }}"
+                     class="img-fluid my-3">
+                {% else %}
+                <img src="{% static 'assets/img/icon/default-logo.png' %}" alt="Default Logo" class="img-fluid my-3">
+                {% endif %}
+                <p>{{ job.employer.company_description }}</p>
+
+                <h5>Contact Information</h5>
+                <p><strong>Email:</strong> {{ job.employer.email }}</p>
+                <p><strong>Phone:</strong> {{ job.employer.phone }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to Show/Hide Application Form -->
+<script>
+    document.getElementById("show-apply-form")?.addEventListener("click", function () {
+        var form = document.getElementById("application-form");
+        form.style.display = (form.style.display === "none") ? "block" : "none";
+    });
+</script>
+
+{% endblock %}

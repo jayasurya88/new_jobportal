@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Edit Profile</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label>Email (Read-only):</label>
+        <input type="email" value="{{ user.email }}" class="form-control mb-3" readonly>
+        
+        <label>Phone:</label>
+        <input type="text" name="phone" value="{{ user.phone }}" class="form-control mb-3">
+
+        {% if user.user_type == "employer" %}
+            <label>Company Name:</label>
+            <input type="text" name="company_name" value="{{ user.company_name }}" class="form-control mb-3">
+
+            <label>Company Website:</label>
+            <input type="url" name="company_website" value="{{ user.company_website }}" class="form-control mb-3">
+
+            <label>Company Logo:</label>
+            <input type="file" name="company_logo" class="form-control mb-3">
+        
+        {% elif user.user_type == "job_seeker" %}
+            <label>Skills:</label>
+            <textarea name="skills" class="form-control mb-3">{{ user.skills }}</textarea>
+        {% endif %}
+
+        <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+        <a href="{% url 'profile_view' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+{% endblock content %}

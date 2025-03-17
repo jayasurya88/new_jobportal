@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Manage Jobs</h2>
+
+    <!-- Button to Post a New Job -->
+    <a href="{% url 'post_job' %}" class="btn btn-primary mb-3">Post a New Job</a>
+
+    <!-- List of Jobs -->
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Salary Range</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.title }}</td>
+                    <td>{{ job.location }}</td>
+                    <td>${{ job.salary_min }} - ${{ job.salary_max }}</td>
+                    <td>{{ job.status }}</td>
+                    <td>
+                        <a href="{% url 'view_job' job.id %}" class="btn btn-info btn-sm">View</a>
+                        <a href="{% url 'edit_job' job.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{% url 'delete_job' job.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No jobs posted yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

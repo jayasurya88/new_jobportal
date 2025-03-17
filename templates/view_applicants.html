@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Applicants for {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Applicants for <strong>{{ job.title }}</strong></h2>
+
+    <!-- If no applicants -->
+    {% if not applications %}
+        <p>No applicants have applied for this job yet.</p>
+    {% else %}
+        <table class="table table-bordered mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Applicant</th>
+                    <th>Resume</th>
+                    <th>Qualification</th>
+                    <th>Year of Passout</th>
+                    <th>Experience (Years)</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td>{{ application.applicant.username }}</td>
+                    <td><a href="{{ application.resume.url }}" target="_blank" class="btn btn-primary">View Resume</a></td>
+                    <td>{{ application.qualification }}</td>
+                    <td>{{ application.year_of_passout }}</td>
+                    <td>{{ application.experience|default:"0" }}</td>
+                    <td>{{ application.status }}</td>
+
+                    <!-- Update Status Form -->
+                    <td>
+                        <form method="POST" action="{% url 'update_application_status' application.id %}">
+                            {% csrf_token %}
+                            <select name="status" class="form-control" required>
+                                <option value="Pending" {% if application.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Reviewed" {% if application.status == 'Reviewed' %}selected{% endif %}>Reviewed</option>
+                                <option value="Accepted" {% if application.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                                <option value="Rejected" {% if application.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                            </select>
+                            <button type="submit" class="btn btn-success mt-2">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

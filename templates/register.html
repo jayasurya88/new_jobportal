@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register - Job Portal{% endblock %}
+
+{% block content %}
+<div class="container section-padding">
+    <div class="form-box white-bg p-5">
+        <h2 class="section-tittle text-center">Register</h2>
+        
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form action="{% url 'register_view' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="account-type">Account Type</label>
+                <select id="account-type" name="account_type" class="form-control" required onchange="toggleFields()">
+                    <option value="job_seeker">Job Seeker</option>
+                    <option value="employer">Employer</option>
+                </select>
+            </div>
+            
+            <!-- Job Seeker Fields -->
+            <div id="job-seeker-fields">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="skills">Skills/Expertise (Optional)</label>
+                    <textarea id="skills" name="skills" class="form-control" placeholder="You can update this later"></textarea>
+                </div>
+            </div>
+            
+            <!-- Employer Fields -->
+            <div id="employer-fields" style="display: none;">
+                <div class="form-group">
+                    <label for="employer-name">Employer Name</label>
+                    <input type="text" id="employer-name" name="employer_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="company-name">Company Name</label>
+                    <input type="text" id="company-name" name="company_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="company-website">Company Website</label>
+                    <input type="url" id="company-website" name="company_website" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="company-image">Company Logo</label>
+                    <input type="file" id="company-image" name="company_image" class="form-control">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn w-100">Register</button>
+        </form>
+        <p class="text-center mt-3">Already have an account? <a href="{% url 'login_view' %}" class="theme-color">Login here</a></p>
+    </div>
+</div>
+
+<script>
+   function toggleFields() {
+    var accountType = document.getElementById("account-type").value;
+    
+    var jobSeekerFields = document.getElementById("job-seeker-fields");
+    var employerFields = document.getElementById("employer-fields");
+
+    var jobSeekerInputs = jobSeekerFields.querySelectorAll("input, textarea");
+    var employerInputs = employerFields.querySelectorAll("input");
+
+    if (accountType === "job_seeker") {
+        jobSeekerFields.style.display = "block";
+        employerFields.style.display = "none";
+
+        jobSeekerInputs.forEach(input => input.removeAttribute("disabled"));
+        employerInputs.forEach(input => input.setAttribute("disabled", "disabled"));
+    } else {
+        jobSeekerFields.style.display = "none";
+        employerFields.style.display = "block";
+
+        jobSeekerInputs.forEach(input => input.setAttribute("disabled", "disabled"));
+        employerInputs.forEach(input => input.removeAttribute("disabled"));
+    }
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Job Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+</head>
+
+<body class="gray-bg">
+    <header>
+        <div class="header-area header-transparrent">
+            <div class="headder-top header-sticky">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-3 col-md-2">
+                            <div class="logo">
+                                <a href="{% url 'index' %}">
+                                    <img src="{% static 'assets/img/logo/logo.png' %}" alt="Job Portal Logo">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-9">
+                            <div class="menu-wrapper">
+                                <div class="main-menu">
+                                    <nav class="d-none d-lg-block">
+                                        <ul id="navigation">
+
+
+
+
+
+                                            {% if user.is_authenticated %}
+                                            {% if user.user_type == "employer" %}
+                                            <!-- Recruiter Menu -->
+                                            <li><a href="{% url 'recruiter_dashboard' %}">Dashboard</a></li>
+                                            <li><a href="{% url 'manage_jobs' %}">Manage Jobs</a></li>
+                                            <li><a href="{% url 'post_job' %}">Post a Job</a></li>
+                                            {% if job %}
+                                            <li><a href="{% url 'view_applicants' job.id %}">View Applicants</a></li>
+                                            {% endif %}
+
+
+                                            {% else %}
+                                            <!-- Job Seeker Menu -->
+                                            <li><a href="{% url 'index' %}">Home</a></li>
+                                            <li><a href="{% url 'my_applications' %}">My Application</a></li>
+                                            <li><a href="{% url 'about' %}">About</a></li>
+                                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                                            <li><a href="{% url 'job_listing' %}">Find a Job</a></li>
+                                            {% endif %}
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="header-btn d-none f-right d-lg-block">
+                                    {% if user.is_authenticated %}
+                                    <div class="dropdown">
+                                        <button class="btn head-btn2 dropdown-toggle" type="button" id="userMenu"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            {{ user.username }}
+                                            {% if user.user_type == "employer" %}(Recruiter){% endif %}
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="userMenu">
+                                            <li><a href="{% url 'profile_view' %}" class="dropdown-item">Profile</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                        </ul>
+                                    </div>
+                                    {% else %}
+                                    <a href="{% url 'register_view' %}" class="btn head-btn1">Register</a>
+                                    <a href="{% url 'login_view' %}" class="btn head-btn2">Login</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

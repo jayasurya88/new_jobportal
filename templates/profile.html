@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Profile Information</h1>
+
+    <div class="card shadow-lg p-4">
+        <h3 class="text-primary">Welcome, {{ user.username }}</h3>
+
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Phone:</strong> {{ user.phone|default:'Not provided' }}</p>
+        <p><strong>Account Type:</strong> {{ user.get_user_type_display }}</p>
+
+        {% if user.user_type == "employer" %}
+            <hr>
+            <h4>Company Information</h4>
+            <p><strong>Company Name:</strong> {{ user.company_name|default:'Not provided' }}</p>
+            <p><strong>Company Website:</strong> 
+                {% if user.company_website %}
+                    <a href="{{ user.company_website }}" target="_blank">{{ user.company_website }}</a>
+                {% else %}
+                    Not provided
+                {% endif %}
+            </p>
+
+            {% if user.company_logo %}
+                <p><strong>Company Logo:</strong></p>
+                <img src="{{ user.company_logo.url }}" alt="Company Logo" class="img-fluid rounded" style="max-height: 200px;">
+            {% endif %}
+
+        {% elif user.user_type == "job_seeker" %}
+            <hr>
+            <h4>Skills</h4>
+            <p>{{ user.skills|linebreaks|default:'No skills specified' }}</p>
+        {% endif %}
+
+
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-3">Edit Profile</a>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,57 @@
+<!-- edit_job.html -->
+{% extends "base.html" %}
+{% block title %}Edit Job{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Edit Job</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Job Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ job.title }}" required>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="experience_min" class="form-label">Min Experience (Years)</label>
+                <input type="number" class="form-control" id="experience_min" name="experience_min" value="{{ job.experience_min }}" required min="0">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="experience_max" class="form-label">Max Experience (Years)</label>
+                <input type="number" class="form-control" id="experience_max" name="experience_max" value="{{ job.experience_max }}" required min="0">
+            </div>
+        </div>
+        
+        
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" required>{{ job.description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ job.location }}">
+        </div>
+
+       
+
+        <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" id="status" name="status">
+                <option value="Open" {% if job.status == 'Open' %}selected{% endif %}>Open</option>
+                <option value="Closed" {% if job.status == 'Closed' %}selected{% endif %}>Closed</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Job Image (Optional)</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{% url 'manage_jobs' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
