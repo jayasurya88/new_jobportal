@@ -1,94 +1,49 @@
 # Python
-*.py[cod]
 __pycache__/
-*.so
-*.egg
-*.egg-info/
-dist/
-build/
-eggs/
-parts/
-bin/
-var/
-sdist/
-develop-eggs/
-.installed.cfg
-lib/
-lib64/
-venv/
-.env/
-.venv/
-env/
-ENV/
-.Python
-pip-log.txt
-pip-delete-this-directory.txt
+*.py[cod]
+*$py.class
 
 # Django
 *.log
 *.pot
 *.pyc
-local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/
+local_settings.py
 
-# IDE specific files
-.idea/
+# Virtual Environment
+venv/
+env/
+ENV/
+Scripts/
+Lib/
+pyvenv.cfg
+
+# IDE
 .vscode/
+.idea/
 *.swp
 *.swo
-*~
 
-# Windows specific
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# Node modules (if using any JavaScript/frontend frameworks)
-node_modules/
-npm-debug.log
-
-# Distribution / packaging
-.Python
-env/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-
-# Translations
-*.mo
-
-# Azure specific
-*.publishsettings
-PublishScripts/
-
-# Misc
-.DS_Store
+# Environment variables
+.env
 .env.local
 .env.development.local
 .env.test.local
-.env.production.local 
+.env.production.local
+
+# Static files collected
+staticfiles/
+
+# Uploaded media files
+media/
+uploads/
+
+# Database backups
+*.dump
+*.sql
+
+# System Files
+.DS_Store
+Thumbs.db 
